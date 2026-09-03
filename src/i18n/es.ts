@@ -8,8 +8,8 @@ export const es: Content = {
     oneLiner:
       'Llevo datos etiquetados a un almacén bien definido, entreno el modelo sin filtrar información del futuro y dejo predicciones con una confianza que alguien pueda revisar.',
     recentWork:
-      'ByteAI, revisión de radiografías de tórax (cardiomegalia y derrame pleural), y un almacén de quejas CFPB con un clasificador de producto',
-    location: 'Remoto',
+      'CXR AI Analyzer y un lakehouse CFPB — los dos están abajo.',
+    location: 'Tijuana, Baja California · dispuesto a reubicarme',
     email: 'rogeliolzgaesc@gmail.com',
     github: 'https://github.com/roger-git-427',
     linkedin: 'https://www.linkedin.com/in/rogelio-lizarraga-escobar/',
@@ -17,9 +17,9 @@ export const es: Content = {
   },
   about: {
     summary:
-      'Mi trabajo cubre el ciclo completo: diseñar tablas, entrenar con una evaluación seria y dejar una interfaz o una API donde se vea la confianza del modelo y una persona pueda decidir. Busco trabajo en ingeniería de inteligencia artificial y datos.',
+      'Vivo en Tijuana; abierto a remoto o a reubicarme. Licenciatura en Ciencia de Datos y Matemáticas en el Tecnológico de Monterrey (especialidad en IA avanzada). Ahora soy Data Manager en una empresa de geomática: datos de vuelo a S3 y a un NAS, Azure/PostgreSQL, reportes. Busco roles de ingeniería de IA y datos donde alguien todavía tenga que confiar en la puntuación.',
     background:
-      'Eso quedó hecho en dos sistemas. ByteAI revisa radiografías de tórax para cardiomegalia y derrame pleural, con ConvNeXt-Tiny, puntuaciones de confianza y mapas Grad-CAM. Con las quejas del CFPB armé un esquema en estrella y un modelo que, a partir del texto, indica el producto financiero y se evalúa en fechas posteriores al entrenamiento.',
+      'Dos sistemas en esta página: CXR AI Analyzer para tamizaje de radiografías de tórax, y un lakehouse de quejas CFPB con clasificador de producto, búsqueda MiniLM y SQL de solo lectura.',
     canDo: [
       'Definir la granularidad de los datos, pasar de bronce a plata a oro y consultar todo en SQL.',
       'Entrenar con clases desbalanceadas y sin fugas de información (separación por paciente o por fecha, pesos por clase).',
@@ -29,8 +29,8 @@ export const es: Content = {
   },
   skills: {
     data: ['SQL', 'Python', 'pandas', 'esquemas en estrella', 'PostgreSQL', 'DuckDB'],
-    models: ['PyTorch', 'scikit-learn', 'MLflow', 'evaluación'],
-    serve: ['FastAPI', 'React'],
+    models: ['PyTorch', 'scikit-learn', 'MLflow', 'sentence-transformers'],
+    serve: ['FastAPI', 'React', 'Docker'],
   },
   skillDomains: {
     data: 'datos',
@@ -46,52 +46,53 @@ export const es: Content = {
   ],
   projects: [
     {
-      id: 'byteai',
-      name: 'ByteAI · radiografías de tórax',
+      id: 'cxrai',
+      name: 'CXR AI Analyzer · radiografías de tórax',
       tagline:
-        'Revisión clínica de cardiomegalia y derrame pleural con ConvNeXt-Tiny, confianza, precisión en el umbral de revisión y Grad-CAM.',
+        'Revisión clínica de cardiomegalia y derrame pleural con ConvNeXt-Tiny, confianza, Grad-CAM y cuentas multi-clínica.',
       problem:
         'Una clínica necesita una segunda mirada a las placas de tórax para dos hallazgos frecuentes: una puntuación y un mapa de calor con los que el médico pueda estar de acuerdo o no.',
       result:
-        'Dos clasificadores binarios, entrenados con separación por paciente y pesos por clase, integrados en una aplicación en español con confianza, Grad-CAM, roles e historial de auditoría. Apoya la decisión; no diagnostica.',
-      stack: ['PyTorch', 'timm', 'FastAPI', 'React', 'PostgreSQL'],
+        'Dos clasificadores binarios, entrenados con separación por paciente y pesos por clase, en una aplicación multi-clínica en español: confianza, Grad-CAM, informe PDF, sesiones (master / admin / paciente) e historial de auditoría. Apoya la decisión; no diagnostica.',
+      stack: ['PyTorch', 'timm', 'FastAPI', 'React', 'PostgreSQL', 'Docker'],
       github: 'https://github.com/roger-git-427/chest_xray_AI',
       metric: { label: 'prueba', value: 'por paciente' },
       stages: {
         ingest:
-          'Usé NIH ChestX-ray14 con las listas oficiales de entrenamiento y prueba por paciente. El conjunto trae catorce hallazgos; el producto salió con dos — cardiomegalia y derrame — porque se ven con claridad y hay suficientes casos para medir. Las imágenes no están en el repositorio público.',
+          'Usé NIH ChestX-ray14 con las listas oficiales de entrenamiento y prueba por paciente. El conjunto trae catorce hallazgos; el producto salió con dos — cardiomegalia y derrame — porque se ven con claridad y hay suficientes casos para medir. Los pesos solo se cargan si el checkpoint está en disco. Las imágenes no están en el repositorio.',
         transform:
-          'El mismo paciente no puede estar en entrenamiento y en prueba. Cada hallazgo es sí o no. Como son poco frecuentes, la función de pérdida lleva pesos por clase: si no, el modelo aprende a decir que todo está normal y parece bueno sin ser útil.',
+          'El mismo paciente no puede estar en entrenamiento y en prueba. Cada hallazgo es sí o no. Como son poco frecuentes, la función de pérdida lleva pesos por clase: si no, el modelo aprende a decir que todo está normal y parece bueno sin ser útil. PNG, JPG y DICOM siguen el mismo camino de tamizaje.',
         train:
           'ConvNeXt-Tiny preentrenado en ImageNet con timm, entrenado como un clasificador binario por hallazgo con AdamW. Me quedé con el modelo de mejor ROC-AUC en validación; los dos hallazgos salieron al producto en cuanto sus clasificadores pasaron esa validación.',
         evaluate:
-          'Se evalúa en imágenes de prueba del NIH, medidas por separado para cada hallazgo. El ROC-AUC ordena los casos y la matriz de confusión describe el umbral de trabajo. La interfaz muestra una confianza calibrada y solo marca el hallazgo si pasa el umbral de esa condición. La pregunta de la clínica es sencilla: cuando pide revisión, ¿con qué frecuencia acierta?',
+          'Se evalúa en imágenes de prueba del NIH, medidas por separado para cada hallazgo. El ROC-AUC ordena los casos y la matriz de confusión describe el umbral de trabajo. La interfaz muestra una confianza y solo marca el hallazgo si pasa el umbral de esa condición (0,3 cardiomegalia, 0,4 derrame). La pregunta de la clínica es sencilla: cuando pide revisión, ¿con qué frecuencia acierta?',
         serve:
-          'Aplicación clínica en español donde se abre el estudio y se ve la confianza de cardiomegalia y derrame, el mapa Grad-CAM y un informe para exportar, con roles e historial de auditoría. Quien interpreta la imagen sigue siendo un lector con licencia.',
+          'Docker Compose levanta Postgres, FastAPI y nginx; en local se usa SQLite. Se abre el estudio y se ve la confianza de cardiomegalia y derrame, el mapa Grad-CAM y un informe para exportar. Las clínicas están aisladas; los roles son master, admin y paciente, con sesiones e historial de auditoría. Quien interpreta la imagen sigue siendo un lector con licencia.',
       },
     },
     {
       id: 'cfpb-intelligence',
-      name: 'Quejas CFPB · producto a partir del texto',
+      name: 'Quejas CFPB · lakehouse e inteligencia',
       tagline:
-        'Del texto de la queja al producto financiero, con TF-IDF, regresión logística, confianza y evaluación en fechas posteriores al entrenamiento.',
+        'Lakehouse CFPB en DuckDB: clasificador de producto con corte por fecha, búsqueda MiniLM y SQL de solo lectura.',
       problem:
-        'Las quejas llegan en texto libre. Antes de que alguien lea la cola, conviene saber de qué producto habla el mensaje y qué tan seguro está el modelo, sin usar quejas futuras en el entrenamiento.',
+        'Las quejas llegan en texto libre. Antes de que alguien lea la cola, conviene saber de qué producto habla el mensaje y qué tan seguro está el modelo, sin usar quejas futuras en el entrenamiento. Quien analiza también necesita SQL sobre el almacén, no solo una puntuación.',
       result:
-        'Evaluado en fechas posteriores al entrenamiento: exactitud 0,80, F1 ponderado 0,80 y F1 macro 0,68. Hipoteca e informes de crédito van bien; clases pequeñas como transferencias de dinero, no. Cada predicción trae confianza y alternativas.',
-      stack: ['Python', 'SQL', 'scikit-learn', 'MLflow', 'FastAPI', 'DuckDB'],
+        'En fechas posteriores al entrenamiento (nov–dic 2024): exactitud 0,80, F1 ponderado 0,80 y F1 macro 0,68 en ocho productos. Hipoteca e informes de crédito se sostienen; transferencias de dinero, no. FastAPI sirve producto y confianza, quejas parecidas con MiniLM, y SQL de solo lectura sobre oro.',
+      stack: ['Python', 'DuckDB', 'scikit-learn', 'MLflow', 'sentence-transformers', 'FastAPI'],
+      github: 'https://github.com/roger-git-427/complaint_intelligence_v2.0',
       metric: { label: 'prueba', value: '0,80 exact. · 0,68 F1 macro' },
       stages: {
         ingest:
-          'Los datos vienen de la base de quejas del consumidor del CFPB. Hay muchos productos etiquetados; el modelo responde una sola cosa: de qué producto trata este texto. La compañía, el asunto, el estado y la fecha viven en el almacén para consultarlos en SQL, fuera del modelo.',
+          'Los datos se bajan de la base de quejas del CFPB por API, zip masivo o un snapshot de Hugging Face, y se cortan a narrativas de 2024 (~8 mil filas). La granularidad es una queja. El clasificador solo ve el texto; la compañía, el asunto, el estado y la fecha viven en el almacén para SQL.',
         transform:
-          'Organizado en capas bronce, plata y oro con esquema de estrella. El corte entre entrenamiento y prueba es por fecha: lo que llega después no entrena. Los informes de crédito dominan el conjunto; un modelo que siempre predijera eso se vería bueno sin ser útil. Los productos con muy pocos casos se dejan fuera.',
+          'Bronce es parquet tal como llega. Plata tipa fechas, pasa sí/no a booleanos y quita duplicados por complaint_id. Oro es un esquema en estrella (fact_complaints; compañía, producto, asunto, geografía, canal, calendario). Hay chequeos de unicidad y de llaves foráneas de compañía. Los productos con menos de 40 casos se dejan fuera. Después de ordenar por date_received, el último 20 % es prueba: lo que llega después no entrena.',
         train:
-          'TF-IDF (unigramas y bigramas) que alimenta una regresión logística con pesos por clase, registrada en MLflow y entrenada como un solo modelo multiclase. Me quedé con la corrida medida en fechas posteriores, en lugar de una mezcla aleatoria de las mismas semanas.',
+          'TF-IDF (unigramas y bigramas, 40 mil rasgos) que alimenta una regresión logística con pesos por clase, registrada en MLflow. Me quedé con la corrida medida en fechas posteriores, no con una mezcla de las mismas semanas. El entrenamiento también ajusta un modelo de respuesta a tiempo (la narrativa es una señal débil) y arma un índice MiniLM sobre plata, con TF-IDF de respaldo.',
         evaluate:
-          'En fechas más recientes que el entrenamiento, la exactitud llega a 0,80 y el F1 ponderado también a 0,80. El F1 macro es 0,68: ese es el número que no esconde las clases con pocos ejemplos. Por producto, hipoteca e informes de crédito se sostienen; las transferencias de dinero no. El sistema devuelve una confianza y alternativas. La pregunta práctica es la misma que en la revisión de radiografías: cuando asigna un producto, ¿qué porcentaje de esas asignaciones son correctas?',
+          'En fechas posteriores (2024-11-19 → 2024-12-24): exactitud 0,80, F1 ponderado 0,80, F1 macro 0,68. Hipoteca F1 0,89 e informes de crédito 0,86; transferencias de dinero 0,29. El modelo de respuesta a tiempo da ROC-AUC 0,81 y F1 macro 0,50: la exactitud se ve alta porque casi todas las respuestas son a tiempo, así que no es el número que importa. Cada llamada de producto trae confianza y alternativas.',
         serve:
-          'Se pega el texto y se obtiene el producto, la confianza y las siguientes opciones, además de quejas parecidas encontradas con la misma representación del texto. Las preguntas de análisis van a SQL de solo lectura sobre la capa oro; si un modelo de lenguaje propone la consulta, igual tiene que pasar un filtro que solo permite lecturas. El clasificador ordena la cola; una persona cierra el caso.',
+          'FastAPI: /predict devuelve producto, confianza y alternativas; /search encuentra quejas parecidas con MiniLM; /sql y /chat convierten preguntas analíticas a DuckDB sobre oro. Si un modelo de lenguaje propone SQL, igual tiene que pasar un filtro de solo SELECT (sin DML/DDL ni varias sentencias). Docker Compose sirve la API sobre el parquet de oro y los artefactos entrenados. El clasificador ordena la cola; una persona cierra el caso.',
       },
     },
   ],

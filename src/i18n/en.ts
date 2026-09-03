@@ -8,8 +8,8 @@ export const en: Content = {
     oneLiner:
       'I take labeled data, put it in a warehouse with a documented grain, train a model on a leak-safe split, and serve predictions a reviewer can inspect.',
     recentWork:
-      'ByteAI chest X-ray screening (cardiomegaly, pleural effusion) and a CFPB complaint warehouse with a product classifier',
-    location: 'Remote',
+      'CXR AI Analyzer and a CFPB lakehouse — both below.',
+    location: 'Tijuana, Baja California · willing to relocate',
     email: 'rogeliolzgaesc@gmail.com',
     github: 'https://github.com/roger-git-427',
     linkedin: 'https://www.linkedin.com/in/rogelio-lizarraga-escobar/',
@@ -17,9 +17,9 @@ export const en: Content = {
   },
   about: {
     summary:
-      'My work covers the full path from raw data to a served prediction: tables and transforms, a model evaluated honestly, and an API or UI that shows a score a human can act on. I am looking for AI and data engineering roles.',
+      'Based in Tijuana; open to remote or relocate. B.S. in Data Science and Mathematics at Tecnológico de Monterrey (minor in Advanced AI). Now Data Manager at a geomatics company — flight data into S3 and a NAS, Azure/PostgreSQL, reporting. I look for AI and data engineering roles where a person still has to trust the score.',
     background:
-      'Two finished systems follow that path. ByteAI screens chest X-rays for cardiomegaly and pleural effusion with ConvNeXt-Tiny, confidence, and Grad-CAM. The CFPB platform turns consumer complaints into a gold star schema and routes each narrative to a financial product with a time-based holdout.',
+      'Two systems on this page: CXR AI Analyzer for chest X-ray screening, and a CFPB complaint lakehouse with a product classifier, MiniLM search, and guarded SQL.',
     canDo: [
       'Model the grain of a dataset, build bronze → silver → gold, and query it in SQL.',
       'Train under imbalance and leakage constraints (patient-level splits, time splits, class weights).',
@@ -29,8 +29,8 @@ export const en: Content = {
   },
   skills: {
     data: ['SQL', 'Python', 'pandas', 'star schemas', 'PostgreSQL', 'DuckDB'],
-    models: ['PyTorch', 'scikit-learn', 'MLflow', 'evals'],
-    serve: ['FastAPI', 'React'],
+    models: ['PyTorch', 'scikit-learn', 'MLflow', 'sentence-transformers'],
+    serve: ['FastAPI', 'React', 'Docker'],
   },
   skillDomains: {
     data: 'data',
@@ -46,52 +46,53 @@ export const en: Content = {
   ],
   projects: [
     {
-      id: 'byteai',
-      name: 'ByteAI · chest X-ray screening',
+      id: 'cxrai',
+      name: 'CXR AI Analyzer · chest X-ray screening',
       tagline:
-        'Clinic screening for cardiomegaly and pleural effusion: ConvNeXt-Tiny, confidence, precision at a review threshold, Grad-CAM.',
+        'Clinic screening for cardiomegaly and pleural effusion: ConvNeXt-Tiny, confidence, Grad-CAM, multi-clinic accounts.',
       problem:
         'A clinic needs a second pass on chest films for two common findings, with a score and a heatmap a clinician can agree or disagree with.',
       result:
-        'Two binary specialists, trained with patient-level holdout and class-weighted loss, shipped in a Spanish clinic UI with confidence scores, Grad-CAM, roles, and an audit trail. Decision support, not a diagnosis.',
-      stack: ['PyTorch', 'timm', 'FastAPI', 'React', 'PostgreSQL'],
+        'Two binary specialists, trained with patient-level holdout and class-weighted loss, shipped in a Spanish multi-clinic app: confidence, Grad-CAM, PDF reports, session auth (master / admin / patient), and an audit trail. Decision support, not a diagnosis.',
+      stack: ['PyTorch', 'timm', 'FastAPI', 'React', 'PostgreSQL', 'Docker'],
       github: 'https://github.com/roger-git-427/chest_xray_AI',
       metric: { label: 'holdout', value: 'patient-level' },
       stages: {
         ingest:
-          'Sourced from NIH ChestX-ray14, using the official patient-level training and test lists. Fourteen findings exist in the labels; the product ships two — cardiomegaly and pleural effusion — because they are visually distinct and common enough to evaluate. Images are not included in the public repo.',
+          'Sourced from NIH ChestX-ray14, using the official patient-level training and test lists. Fourteen findings exist in the labels; the product ships two — cardiomegaly and pleural effusion — because they are visually distinct and common enough to evaluate. Weights load only when the checkpoint file is on disk. Images are not in the repo.',
         transform:
-          'No patient appears in both the training and test sets, and each finding is a yes/no label. Both are rare, so the loss is class-weighted instead of rewarding a model that always predicts “no finding.”',
+          'No patient appears in both the training and test sets, and each finding is a yes/no label. Both are rare, so the loss is class-weighted instead of rewarding a model that always predicts “no finding.” PNG, JPG, and DICOM all go through the same screening path.',
         train:
           'ConvNeXt-Tiny (timm), pretrained on ImageNet, trained as one binary classifier per finding under AdamW. The retained checkpoint is the one with the best validation ROC-AUC; both findings shipped once their classifiers cleared that bar.',
         evaluate:
-          'Evaluated on held-out NIH test images, reported separately for each finding. ROC-AUC measures ranking quality; a confusion matrix captures the operating point. The UI shows a calibrated confidence score and flags a finding only above a per-condition threshold. Precision at that threshold is the question a clinic would ask: when the system says review this, how often is it right?',
+          'Evaluated on held-out NIH test images, reported separately for each finding. ROC-AUC measures ranking quality; a confusion matrix captures the operating point. The UI shows a confidence score and flags a finding only above a per-condition threshold (0.3 cardiomegaly, 0.4 effusion). Precision at that threshold is the clinic question: when the system says review this, how often is it right?',
         serve:
-          'A Spanish clinic app where a user opens a study and sees confidence for cardiomegaly and effusion, a Grad-CAM heatmap, and an exportable report, with role-based access and an audit trail. A licensed reader still interprets every image.',
+          'Docker Compose runs Postgres, FastAPI, and nginx; local dev uses SQLite. A user opens a study and sees confidence for cardiomegaly and effusion, a Grad-CAM heatmap, and an exportable report. Clinics are isolated; roles are master, admin, and patient, with sessions and an audit trail. A licensed reader still interprets every image.',
       },
     },
     {
       id: 'cfpb-intelligence',
       name: 'Consumer complaint intelligence',
       tagline:
-        'CFPB narratives routed to a financial product with TF-IDF and logistic regression, confidence, and a time-based holdout.',
+        'CFPB lakehouse on DuckDB: product classifier with a time holdout, MiniLM retrieval, and guarded text-to-SQL.',
       problem:
-        'Complaints arrive as free text. Before a person reads the queue, the system should say which product the narrative is about — and how sure it is — without leaking later complaints into training.',
+        'Complaints arrive as free text. Before a person reads the queue, the system should say which product the narrative is about — and how sure it is — without leaking later complaints into training. Analysts still need SQL on the warehouse, not only a classifier score.',
       result:
-        'Evaluated on dates later than training: 0.80 accuracy, 0.80 weighted F1, 0.68 macro F1. Mortgage and credit reporting are strong; sparse classes such as money transfer are not. Predictions ship with confidence and ranked alternatives.',
-      stack: ['Python', 'SQL', 'scikit-learn', 'MLflow', 'FastAPI', 'DuckDB'],
+        'On later dates than training (Nov–Dec 2024): 0.80 accuracy, 0.80 weighted F1, 0.68 macro F1 on eight products. Mortgage and credit reporting hold; money transfer does not. FastAPI serves product + confidence, MiniLM similar-complaint search, and SELECT-only SQL on gold.',
+      stack: ['Python', 'DuckDB', 'scikit-learn', 'MLflow', 'sentence-transformers', 'FastAPI'],
+      github: 'https://github.com/roger-git-427/complaint_intelligence_v2.0',
       metric: { label: 'holdout', value: '0.80 acc · 0.68 macro F1' },
       stages: {
         ingest:
-          'Sourced from the CFPB Consumer Complaint Database. Many product labels exist; the model answers one question: given the narrative, which product is this. Company, issue, state, and date stay in the warehouse for SQL, outside the model itself.',
+          'Landed from the CFPB Consumer Complaint Database via API, bulk zip, or a Hugging Face snapshot, then sliced to 2024 narratives (~8k rows). Grain is one complaint. The classifier sees only the narrative; company, issue, state, and date stay in the warehouse for SQL.',
         transform:
-          'Structured as a bronze → silver → gold star schema (complaint fact; company, product, issue, geography, channel, calendar). The train/test cut is by date: later complaints never train the model. Credit reporting dominates, so a majority classifier would look accurate and still be useless. Rare products below a minimum count are dropped.',
+          'Bronze is parquet as landed. Silver types dates, maps yes/no flags, and dedupes on complaint_id. Gold is a star schema (fact_complaints; company, product, issue, geo, channel, date). Quality checks uniqueness and company foreign keys. Products with fewer than 40 rows are dropped. After sorting by date_received, the last 20% is holdout — later complaints never train.',
         train:
-          'TF-IDF (unigrams and bigrams) feeding a class-weighted logistic regression, tracked in MLflow and trained as a single multi-class model for product. The retained run is the one scored on later dates rather than a shuffle of the same weeks.',
+          'TF-IDF (unigrams and bigrams, 40k features) feeding a class-weighted logistic regression, tracked in MLflow. The retained product run is the one scored on later dates, not a shuffle of the same weeks. Training also fits a timely-response head (weak signal from narrative alone) and builds a MiniLM embedding index over silver, with TF-IDF as fallback.',
         evaluate:
-          'Evaluated on held-out, later dates: accuracy 0.80, weighted F1 0.80, and macro F1 0.68 — the number that does not hide minority products. Precision and recall by product: mortgage and credit reporting hold up; money transfer does not. Each call returns a confidence and alternatives. The operational question is the same as screening: when it assigns a product, what fraction of those assignments are true positives?',
+          'Held-out later dates (2024-11-19 → 2024-12-24): accuracy 0.80, weighted F1 0.80, macro F1 0.68. Mortgage F1 0.89 and credit reporting 0.86; money transfer 0.29. The timely-response model is 0.81 ROC-AUC and 0.50 macro F1 — accuracy looks high because almost every response is timely, so it is not the headline number. Each product call returns confidence and ranked alternatives.',
         serve:
-          'Paste in a narrative and get the predicted product, a confidence score, and the next-likely alternatives, plus similar past complaints found through the same text representation. Analytic questions go to read-only SQL on the gold layer; an optional LLM-generated query still has to pass a SELECT-only guard. The model routes the complaint; a person closes the case.',
+          'FastAPI: /predict returns product, confidence, and alternatives; /search finds similar complaints with MiniLM; /sql and /chat compile analytic questions to DuckDB on gold. An optional LLM SQL still has to pass a SELECT-only guard (no DML/DDL, no multi-statement). Docker Compose serves the API over the gold parquet and trained artifacts. The model routes the complaint; a person closes the case.',
       },
     },
   ],

@@ -2,12 +2,11 @@ import { useLocale } from '../i18n/LocaleContext'
 
 export function ModelCard() {
   const { t } = useLocale()
-  const { profile, about, skills, skillDomains, ui } = t
+  const { about, skills, skillDomains, ui } = t
 
   return (
     <section id="model-card" className="section">
       <h2 className="display display-sm">{ui.aboutTitle}</h2>
-      <p className="lede">{profile.oneLiner}</p>
 
       <article className="card paper">
         <div className="card-grid">
