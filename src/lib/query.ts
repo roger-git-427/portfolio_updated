@@ -210,7 +210,7 @@ export function runQuery(raw: string, t: Content): QueryResult {
     return err(
       statement,
       `syntax error at or near "${statement.slice(0, 28)}"`,
-      'SELECT * FROM engineer;  ·  SHOW TABLES  ·  HELP',
+      'SELECT * FROM engineer;  |  SHOW TABLES  |  HELP',
     )
   }
 

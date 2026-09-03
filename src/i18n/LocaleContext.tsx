@@ -48,7 +48,7 @@ export function LocaleProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     document.documentElement.lang = locale
-    document.title = `${t.profile.name} · ${t.profile.role}`
+    document.title = `${t.profile.name} | ${t.profile.role}`
   }, [locale, t.profile.name, t.profile.role])
 
   const value = useMemo(

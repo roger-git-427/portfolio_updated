@@ -7,9 +7,8 @@ export const es: Content = {
     role: 'Ingeniero de IA y datos',
     oneLiner:
       'Llevo datos etiquetados a un almacén bien definido, entreno el modelo sin filtrar información del futuro y dejo predicciones con una confianza que alguien pueda revisar.',
-    recentWork:
-      'CXR AI Analyzer y un lakehouse CFPB — los dos están abajo.',
-    location: 'Tijuana, Baja California · dispuesto a reubicarme',
+    recentWork: 'CXR AI Analyzer y un lakehouse CFPB, los dos están abajo.',
+    location: 'Tijuana, Baja California, dispuesto a reubicarme',
     email: 'rogeliolzgaesc@gmail.com',
     github: 'https://github.com/roger-git-427',
     linkedin: 'https://www.linkedin.com/in/rogelio-lizarraga-escobar/',
@@ -23,7 +22,7 @@ export const es: Content = {
     canDo: [
       'Definir la granularidad de los datos, pasar de bronce a plata a oro y consultar todo en SQL.',
       'Entrenar con clases desbalanceadas y sin fugas de información (separación por paciente o por fecha, pesos por clase).',
-      'Elegir la métrica que importa en la práctica: precisión en un umbral, F1 macro, confianza — no solo una exactitud que se vea bien en una diapositiva.',
+      'Elegir la métrica que importa en la práctica: precisión en un umbral, F1 macro, confianza, no solo una exactitud que se vea bien en una diapositiva.',
       'Montar FastAPI y React para que quien revise vea la predicción, la confianza y el contexto suficiente para decidir.',
     ],
   },
@@ -47,7 +46,7 @@ export const es: Content = {
   projects: [
     {
       id: 'cxrai',
-      name: 'CXR AI Analyzer · radiografías de tórax',
+      name: 'CXR AI Analyzer: radiografías de tórax',
       tagline:
         'Revisión clínica de cardiomegalia y derrame pleural con ConvNeXt-Tiny, confianza, Grad-CAM y cuentas multi-clínica.',
       problem:
@@ -59,7 +58,7 @@ export const es: Content = {
       metric: { label: 'prueba', value: 'por paciente' },
       stages: {
         ingest:
-          'Usé NIH ChestX-ray14 con las listas oficiales de entrenamiento y prueba por paciente. El conjunto trae catorce hallazgos; el producto salió con dos — cardiomegalia y derrame — porque se ven con claridad y hay suficientes casos para medir. Los pesos solo se cargan si el checkpoint está en disco. Las imágenes no están en el repositorio.',
+          'Usé NIH ChestX-ray14 con las listas oficiales de entrenamiento y prueba por paciente. El conjunto trae catorce hallazgos; el producto salió con dos, cardiomegalia y derrame, porque se ven con claridad y hay suficientes casos para medir. Los pesos solo se cargan si el checkpoint está en disco. Las imágenes no están en el repositorio.',
         transform:
           'El mismo paciente no puede estar en entrenamiento y en prueba. Cada hallazgo es sí o no. Como son poco frecuentes, la función de pérdida lleva pesos por clase: si no, el modelo aprende a decir que todo está normal y parece bueno sin ser útil. PNG, JPG y DICOM siguen el mismo camino de tamizaje.',
         train:
@@ -72,16 +71,16 @@ export const es: Content = {
     },
     {
       id: 'cfpb-intelligence',
-      name: 'Quejas CFPB · lakehouse e inteligencia',
+      name: 'Quejas CFPB: lakehouse e inteligencia',
       tagline:
         'Lakehouse CFPB en DuckDB: clasificador de producto con corte por fecha, búsqueda MiniLM y SQL de solo lectura.',
       problem:
         'Las quejas llegan en texto libre. Antes de que alguien lea la cola, conviene saber de qué producto habla el mensaje y qué tan seguro está el modelo, sin usar quejas futuras en el entrenamiento. Quien analiza también necesita SQL sobre el almacén, no solo una puntuación.',
       result:
-        'En fechas posteriores al entrenamiento (nov–dic 2024): exactitud 0,80, F1 ponderado 0,80 y F1 macro 0,68 en ocho productos. Hipoteca e informes de crédito se sostienen; transferencias de dinero, no. FastAPI sirve producto y confianza, quejas parecidas con MiniLM, y SQL de solo lectura sobre oro.',
+        'En fechas posteriores al entrenamiento (nov a dic 2024): exactitud 0,80, F1 ponderado 0,80 y F1 macro 0,68 en ocho productos. Hipoteca e informes de crédito se sostienen; transferencias de dinero, no. FastAPI sirve producto y confianza, quejas parecidas con MiniLM, y SQL de solo lectura sobre oro.',
       stack: ['Python', 'DuckDB', 'scikit-learn', 'MLflow', 'sentence-transformers', 'FastAPI'],
       github: 'https://github.com/roger-git-427/complaint_intelligence_v2.0',
-      metric: { label: 'prueba', value: '0,80 exact. · 0,68 F1 macro' },
+      metric: { label: 'prueba', value: '0,80 exact., 0,68 F1 macro' },
       stages: {
         ingest:
           'Los datos se bajan de la base de quejas del CFPB por API, zip masivo o un snapshot de Hugging Face, y se cortan a narrativas de 2024 (~8 mil filas). La granularidad es una queja. El clasificador solo ve el texto; la compañía, el asunto, el estado y la fecha viven en el almacén para SQL.',
@@ -90,7 +89,7 @@ export const es: Content = {
         train:
           'TF-IDF (unigramas y bigramas, 40 mil rasgos) que alimenta una regresión logística con pesos por clase, registrada en MLflow. Me quedé con la corrida medida en fechas posteriores, no con una mezcla de las mismas semanas. El entrenamiento también ajusta un modelo de respuesta a tiempo (la narrativa es una señal débil) y arma un índice MiniLM sobre plata, con TF-IDF de respaldo.',
         evaluate:
-          'En fechas posteriores (2024-11-19 → 2024-12-24): exactitud 0,80, F1 ponderado 0,80, F1 macro 0,68. Hipoteca F1 0,89 e informes de crédito 0,86; transferencias de dinero 0,29. El modelo de respuesta a tiempo da ROC-AUC 0,81 y F1 macro 0,50: la exactitud se ve alta porque casi todas las respuestas son a tiempo, así que no es el número que importa. Cada llamada de producto trae confianza y alternativas.',
+          'En fechas posteriores (2024-11-19 a 2024-12-24): exactitud 0,80, F1 ponderado 0,80, F1 macro 0,68. Hipoteca F1 0,89 e informes de crédito 0,86; transferencias de dinero 0,29. El modelo de respuesta a tiempo da ROC-AUC 0,81 y F1 macro 0,50: la exactitud se ve alta porque casi todas las respuestas son a tiempo, así que no es el número que importa. Cada llamada de producto trae confianza y alternativas.',
         serve:
           'FastAPI: /predict devuelve producto, confianza y alternativas; /search encuentra quejas parecidas con MiniLM; /sql y /chat convierten preguntas analíticas a DuckDB sobre oro. Si un modelo de lenguaje propone SQL, igual tiene que pasar un filtro de solo SELECT (sin DML/DDL ni varias sentencias). Docker Compose sirve la API sobre el parquet de oro y los artefactos entrenados. El clasificador ordena la cola; una persona cierra el caso.',
       },
@@ -124,11 +123,11 @@ export const es: Content = {
     queryTitle: 'Consulta',
     tables: 'Tablas',
     run: 'Ejecutar',
-    sqlHint: 'SHOW TABLES · SELECT * FROM projects · HELP',
+    sqlHint: 'SHOW TABLES | SELECT * FROM projects | HELP',
     sqlEditorLabel: 'Editor SQL',
     statusReady: 'listo',
     statusRunning: 'ejecutando',
-    statusOk: 'listo — última consulta correcta',
+    statusOk: 'listo, última consulta correcta',
     resultsEmpty: 'Ejecuta la consulta o elige una tabla.',
     errorLabel: 'ERROR',
     hintLabel: 'PISTA',
@@ -156,7 +155,7 @@ export const es: Content = {
     readOnly: 'Desde el navegador esto es solo lectura.',
     readOnlyHint: 'Usa la sección de contacto más abajo.',
     selectNeedsFrom: 'Falta el FROM',
-    engineerHint: 'SELECT * FROM projects; — los dos proyectos están abajo',
+    engineerHint: 'SELECT * FROM projects;  los dos proyectos están abajo',
     projectsHint:
       'Abre un proyecto para ver el problema, la separación de datos, la métrica y el despliegue.',
   },
