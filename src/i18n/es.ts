@@ -2,12 +2,12 @@ import type { Content } from './types'
 
 export const es: Content = {
   profile: {
-    name: 'Rogelio Lizarraga',
+    name: 'Rogelio Lizarraga Escobar',
     handle: 'rogelio',
     role: 'Ingeniero de IA y datos',
     oneLiner:
-      'Llevo datos etiquetados a un almacén bien definido, entreno el modelo sin filtrar información del futuro y dejo predicciones con una confianza que alguien pueda revisar.',
-    recentWork: 'CXR AI Analyzer y un lakehouse CFPB, los dos están abajo.',
+      'Tomo datos operativos, construyo el pipeline alrededor, entreno sin filtrar información del futuro y dejo resultados que alguien pueda revisar y usar.',
+    recentWork: 'Data Manager en Desarrollo Geomatico, ago 2025 a sep 2026.',
     location: 'Tijuana, Baja California, dispuesto a reubicarme',
     email: 'rogeliolzgaesc@gmail.com',
     github: 'https://github.com/roger-git-427',
@@ -16,25 +16,25 @@ export const es: Content = {
   },
   about: {
     summary:
-      'Vivo en Tijuana; abierto a remoto o a reubicarme. Licenciatura en Ciencia de Datos y Matemáticas en el Tecnológico de Monterrey (especialidad en IA avanzada). Ahora soy Data Manager en una empresa de geomática: datos de vuelo a S3 y a un NAS, Azure/PostgreSQL, reportes. Busco roles de ingeniería de IA y datos donde alguien todavía tenga que confiar en la puntuación.',
+      'Vivo en Tijuana; abierto a remoto o a reubicarme. Ingeniería en Ciencia de Datos y Matemáticas en el Tecnológico de Monterrey, Campus Monterrey (promedio 4.0; especialidad en IA avanzada), terminada en 2025. Mi trabajo más reciente fue como Data Manager en una empresa de geomática: datos de vuelo DJI a S3 y a un NAS, Azure/PostgreSQL, reportes y optimización de vuelos a estaciones. Español nativo, inglés C1 y francés básico. Busco roles de ingeniería de IA y datos donde alguien todavía tenga que confiar en el resultado.',
     background:
-      'Dos sistemas en esta página: CXR AI Analyzer para tamizaje de radiografías de tórax, y un lakehouse de quejas CFPB con clasificador de producto, búsqueda MiniLM y SQL de solo lectura.',
+      'De ago 2025 a sep 2026 administré datos de vuelo e infraestructura en Desarrollo Geomatico. Antes construí pronósticos de ocupación hotelera con TCA Software Solutions, detección de productos mal acomodados para OXXO FEMSA y pronóstico de desempeño de productos nuevos con Arca Continental.',
     canDo: [
+      'Construir cargas idempotentes, captura de cambios, orquestación programada y compuertas de conciliación sobre datos operativos.',
       'Definir la granularidad de los datos, pasar de bronce a plata a oro y consultar todo en SQL.',
-      'Entrenar con clases desbalanceadas y sin fugas de información (separación por paciente o por fecha, pesos por clase).',
-      'Elegir la métrica que importa en la práctica: precisión en un umbral, F1 macro, confianza, no solo una exactitud que se vea bien en una diapositiva.',
-      'Montar FastAPI y React para que quien revise vea la predicción, la confianza y el contexto suficiente para decidir.',
+      'Entrenar con clases desbalanceadas y sin fugas de información, usando cortes cronológicos y pesos por clase.',
+      'Servir validaciones y predicciones con FastAPI y el contexto suficiente para decidir qué sigue.',
     ],
   },
   skills: {
-    data: ['SQL', 'Python', 'pandas', 'esquemas en estrella', 'PostgreSQL', 'DuckDB'],
-    models: ['PyTorch', 'scikit-learn', 'MLflow', 'sentence-transformers'],
-    serve: ['FastAPI', 'React', 'Docker'],
+    data: ['Python', 'SQL', 'PostgreSQL', 'DuckDB', 'MongoDB', 'Pandas', 'Airflow', 'n8n'],
+    models: ['PyTorch', 'TensorFlow', 'Keras', 'scikit-learn', 'XGBoost', 'MLflow', 'Optuna'],
+    serve: ['Linux', 'Bash', 'Docker', 'GitHub Actions', 'FastAPI', 'AWS S3', 'MinIO', 'Azure'],
   },
   skillDomains: {
-    data: 'datos',
-    models: 'modelos',
-    serve: 'despliegue',
+    data: 'datos y orquestación',
+    models: 'ML/DL',
+    serve: 'infraestructura y despliegue',
   },
   stages: [
     { id: 'ingest', label: 'carga', hint: 'fuentes y granularidad' },
@@ -45,28 +45,27 @@ export const es: Content = {
   ],
   projects: [
     {
-      id: 'cxrai',
-      name: 'CXR AI Analyzer: radiografías de tórax',
+      id: 'retail-forecasting',
+      name: 'Plataforma de datos retail y pronóstico de demanda',
       tagline:
-        'Revisión clínica de cardiomegalia y derrame pleural con ConvNeXt-Tiny, confianza, Grad-CAM y cuentas multi-clínica.',
+        'Carga automática de pedidos, analítica, pronóstico de demanda y monitoreo de riesgo de inventario en una plataforma con Docker.',
       problem:
-        'Una clínica necesita una segunda mirada a las placas de tórax para dos hallazgos frecuentes: una puntuación y un mapa de calor con los que el médico pueda estar de acuerdo o no.',
+        'Los pedidos tienen que entrar una sola vez, mantenerse conciliados durante todo el pipeline y convertirse en un pronóstico para el día siguiente antes de que el inventario sea un problema.',
       result:
-        'Dos clasificadores binarios, entrenados con separación por paciente y pesos por clase, en una aplicación multi-clínica en español: confianza, Grad-CAM, informe PDF, sesiones (master / admin / paciente) e historial de auditoría. Apoya la decisión; no diagnostica.',
-      stack: ['PyTorch', 'timm', 'FastAPI', 'React', 'PostgreSQL', 'Docker'],
-      github: 'https://github.com/roger-git-427/chest_xray_AI',
-      metric: { label: 'prueba', value: 'por paciente' },
+        'Una carga idempotente en n8n alimenta captura de cambios en PostgreSQL y una cadena programada de siete etapas en Airflow. Una compuerta bloqueante protege la conciliación; FastAPI revisa inventario y el modelo produce pronósticos del día siguiente y niveles de riesgo por días de inventario.',
+      stack: ['Airflow', 'n8n', 'XGBoost', 'PostgreSQL', 'FastAPI', 'Docker'],
+      metric: { label: 'prueba de 30 días', value: '-14,7 % MAE, -20,4 % RMSE' },
       stages: {
         ingest:
-          'Usé NIH ChestX-ray14 con las listas oficiales de entrenamiento y prueba por paciente. El conjunto trae catorce hallazgos; el producto salió con dos, cardiomegalia y derrame, porque se ven con claridad y hay suficientes casos para medir. Los pesos solo se cargan si el checkpoint está en disco. Las imágenes no están en el repositorio.',
+          'Los pedidos entran por una carga idempotente en n8n, así que un reintento no crea dos veces el mismo pedido. La captura de cambios en PostgreSQL lleva esas actualizaciones al resto de la plataforma.',
         transform:
-          'El mismo paciente no puede estar en entrenamiento y en prueba. Cada hallazgo es sí o no. Como son poco frecuentes, la función de pérdida lleva pesos por clase: si no, el modelo aprende a decir que todo está normal y parece bueno sin ser útil. PNG, JPG y DICOM siguen el mismo camino de tamizaje.',
+          'Una cadena programada de siete etapas en Airflow prepara los datos y se detiene en una compuerta de conciliación si los registros no coinciden. CI prueba los contratos de los DAG antes de que lleguen al pipeline.',
         train:
-          'ConvNeXt-Tiny preentrenado en ImageNet con timm, entrenado como un clasificador binario por hallazgo con AdamW. Me quedé con el modelo de mejor ROC-AUC en validación; los dos hallazgos salieron al producto en cuanto sus clasificadores pasaron esa validación.',
+          'Las variables por SKU y día, construidas sin fugas de información, alimentan un pronóstico cronológico con XGBoost. El corte sigue el tiempo: los pedidos futuros nunca ayudan a predecir el pasado.',
         evaluate:
-          'Se evalúa en imágenes de prueba del NIH, medidas por separado para cada hallazgo. El ROC-AUC ordena los casos y la matriz de confusión describe el umbral de trabajo. La interfaz muestra una confianza y solo marca el hallazgo si pasa el umbral de esa condición (0,3 cardiomegalia, 0,4 derrame). La pregunta de la clínica es sencilla: cuando pide revisión, ¿con qué frecuencia acierta?',
+          'En la prueba de 30 días, XGBoost redujo MAE 14,7 % y RMSE 20,4 % frente a persistencia. Esos son los errores que el pronóstico del día siguiente tiene que superar para ser útil.',
         serve:
-          'Docker Compose levanta Postgres, FastAPI y nginx; en local se usa SQLite. Se abre el estudio y se ve la confianza de cardiomegalia y derrame, el mapa Grad-CAM y un informe para exportar. Las clínicas están aisladas; los roles son master, admin y paciente, con sesiones e historial de auditoría. Quien interpreta la imagen sigue siendo un lector con licencia.',
+          'La plataforma corre en Docker. FastAPI expone las revisiones de inventario; la salida es un pronóstico del día siguiente y niveles de riesgo por días de inventario para que quien revisa el stock vea dónde actuar primero.',
       },
     },
     {
@@ -77,21 +76,21 @@ export const es: Content = {
       problem:
         'Las quejas llegan en texto libre. Antes de que alguien lea la cola, conviene saber de qué producto habla el mensaje y qué tan seguro está el modelo, sin usar quejas futuras en el entrenamiento. Quien analiza también necesita SQL sobre el almacén, no solo una puntuación.',
       result:
-        'En fechas posteriores al entrenamiento (nov a dic 2024): exactitud 0,80, F1 ponderado 0,80 y F1 macro 0,68 en ocho productos. Hipoteca e informes de crédito se sostienen; transferencias de dinero, no. FastAPI sirve producto y confianza, quejas parecidas con MiniLM, y SQL de solo lectura sobre oro.',
+        'En fechas posteriores al entrenamiento: exactitud 0,80 y F1 macro 0,68. FastAPI sirve predicciones ordenadas, búsqueda de quejas parecidas con MiniLM y texto a SQL de solo lectura protegido sobre oro.',
       stack: ['Python', 'DuckDB', 'scikit-learn', 'MLflow', 'sentence-transformers', 'FastAPI'],
       github: 'https://github.com/roger-git-427/complaint_intelligence_v2.0',
       metric: { label: 'prueba', value: '0,80 exact., 0,68 F1 macro' },
       stages: {
         ingest:
-          'Los datos se bajan de la base de quejas del CFPB por API, zip masivo o un snapshot de Hugging Face, y se cortan a narrativas de 2024 (~8 mil filas). La granularidad es una queja. El clasificador solo ve el texto; la compañía, el asunto, el estado y la fecha viven en el almacén para SQL.',
+          'Las narrativas de quejas CFPB llegan a una capa de bronce con una queja como granularidad. El clasificador ve la narrativa; los demás campos siguen disponibles para analítica.',
         transform:
-          'Bronce es parquet tal como llega. Plata tipa fechas, pasa sí/no a booleanos y quita duplicados por complaint_id. Oro es un esquema en estrella (fact_complaints; compañía, producto, asunto, geografía, canal, calendario). Hay chequeos de unicidad y de llaves foráneas de compañía. Los productos con menos de 40 casos se dejan fuera. Después de ordenar por date_received, el último 20 % es prueba: lo que llega después no entrena.',
+          'Plata limpia y quita duplicados; oro es un esquema en estrella en DuckDB. Las pruebas automáticas revisan unicidad, nulos y llaves foráneas. Después de ordenar por fecha, las quejas posteriores forman la prueba y nunca entrenan.',
         train:
-          'TF-IDF (unigramas y bigramas, 40 mil rasgos) que alimenta una regresión logística con pesos por clase, registrada en MLflow. Me quedé con la corrida medida en fechas posteriores, no con una mezcla de las mismas semanas. El entrenamiento también ajusta un modelo de respuesta a tiempo (la narrativa es una señal débil) y arma un índice MiniLM sobre plata, con TF-IDF de respaldo.',
+          'TF-IDF con pesos por clase alimenta una regresión logística registrada en MLflow. Un índice separado con MiniLM permite buscar narrativas de quejas parecidas.',
         evaluate:
-          'En fechas posteriores (2024-11-19 a 2024-12-24): exactitud 0,80, F1 ponderado 0,80, F1 macro 0,68. Hipoteca F1 0,89 e informes de crédito 0,86; transferencias de dinero 0,29. El modelo de respuesta a tiempo da ROC-AUC 0,81 y F1 macro 0,50: la exactitud se ve alta porque casi todas las respuestas son a tiempo, así que no es el número que importa. Cada llamada de producto trae confianza y alternativas.',
+          'En la prueba cronológica, el clasificador de producto llegó a 0,80 de exactitud y 0,68 de F1 macro. La API devuelve alternativas ordenadas además de la predicción principal.',
         serve:
-          'FastAPI: /predict devuelve producto, confianza y alternativas; /search encuentra quejas parecidas con MiniLM; /sql y /chat convierten preguntas analíticas a DuckDB sobre oro. Si un modelo de lenguaje propone SQL, igual tiene que pasar un filtro de solo SELECT (sin DML/DDL ni varias sentencias). Docker Compose sirve la API sobre el parquet de oro y los artefactos entrenados. El clasificador ordena la cola; una persona cierra el caso.',
+          'FastAPI sirve predicciones ordenadas, búsqueda semántica con MiniLM y texto a SQL sobre oro. El SQL generado pasa por un filtro de solo lectura antes de llegar a DuckDB. El clasificador ordena la cola; una persona cierra el caso.',
       },
     },
   ],
@@ -113,7 +112,7 @@ export const es: Content = {
     demo: 'demo',
     contactTitle: 'Contacto',
     contactLede:
-      'Busco roles de inteligencia artificial y datos. Lo más fácil es escribirme por correo o por GitHub.',
+      'Busco roles de inteligencia artificial y datos. Lo más fácil es escribirme por correo o por GitHub; teléfono: +52 667 185 0986.',
     email: 'Correo',
     github: 'GitHub',
     linkedin: 'LinkedIn',

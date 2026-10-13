@@ -2,12 +2,12 @@ import type { Content } from './types'
 
 export const en: Content = {
   profile: {
-    name: 'Rogelio Lizarraga',
+    name: 'Rogelio Lizarraga Escobar',
     handle: 'rogelio',
     role: 'AI & Data Engineer',
     oneLiner:
-      'I take labeled data, put it in a warehouse with a documented grain, train a model on a leak-safe split, and serve predictions a reviewer can inspect.',
-    recentWork: 'CXR AI Analyzer and a CFPB lakehouse, both below.',
+      'I take operational data, build the pipeline around it, train on a leak-safe split, and serve results a person can inspect and use.',
+    recentWork: 'Data Manager at Desarrollo Geomatico, Aug 2025 to Sep 2026.',
     location: 'Tijuana, Baja California, willing to relocate',
     email: 'rogeliolzgaesc@gmail.com',
     github: 'https://github.com/roger-git-427',
@@ -16,25 +16,25 @@ export const en: Content = {
   },
   about: {
     summary:
-      'Based in Tijuana; open to remote or relocate. B.S. in Data Science and Mathematics at Tecnológico de Monterrey (minor in Advanced AI). Now Data Manager at a geomatics company: flight data into S3 and a NAS, Azure/PostgreSQL, reporting. I look for AI and data engineering roles where a person still has to trust the score.',
+      'Based in Tijuana; open to remote or relocate. B.S. in Data Science and Mathematics Engineering at Tecnológico de Monterrey, Campus Monterrey (GPA 4.0; minor in Advanced AI), completed in 2025. Most recently Data Manager at a geomatics company: DJI flight data into S3 and a NAS, Azure/PostgreSQL, reporting, and flight-to-station optimization. Native Spanish, English C1, basic French. I look for AI and data engineering roles where a person still has to trust the result.',
     background:
-      'Two systems on this page: CXR AI Analyzer for chest X-ray screening, and a CFPB complaint lakehouse with a product classifier, MiniLM search, and guarded SQL.',
+      'From Aug 2025 to Sep 2026, I managed flight data and infrastructure at Desarrollo Geomatico. Before that, I built hotel occupancy forecasting with TCA Software Solutions, shelf-item detection for OXXO FEMSA, and new-product performance forecasting with Arca Continental.',
     canDo: [
+      'Build idempotent intake, change-data capture, scheduled orchestration, and reconciliation gates around operational data.',
       'Model the grain of a dataset, build bronze → silver → gold, and query it in SQL.',
-      'Train under imbalance and leakage constraints (patient-level splits, time splits, class weights).',
-      'Report the metric that would actually be used: precision at a threshold, macro F1, confidence, not a single vanity score.',
-      'Serve FastAPI and React so a reviewer sees the prediction, the score, and enough context to decide.',
+      'Train under imbalance and leakage constraints with chronological splits and class weights.',
+      'Serve FastAPI checks and predictions with enough context for someone to decide what happens next.',
     ],
   },
   skills: {
-    data: ['SQL', 'Python', 'pandas', 'star schemas', 'PostgreSQL', 'DuckDB'],
-    models: ['PyTorch', 'scikit-learn', 'MLflow', 'sentence-transformers'],
-    serve: ['FastAPI', 'React', 'Docker'],
+    data: ['Python', 'SQL', 'PostgreSQL', 'DuckDB', 'MongoDB', 'Pandas', 'Airflow', 'n8n'],
+    models: ['PyTorch', 'TensorFlow', 'Keras', 'scikit-learn', 'XGBoost', 'MLflow', 'Optuna'],
+    serve: ['Linux', 'Bash', 'Docker', 'GitHub Actions', 'FastAPI', 'AWS S3', 'MinIO', 'Azure'],
   },
   skillDomains: {
-    data: 'data',
-    models: 'models',
-    serve: 'serve',
+    data: 'data & orchestration',
+    models: 'ML/DL',
+    serve: 'infrastructure & serving',
   },
   stages: [
     { id: 'ingest', label: 'ingest', hint: 'sources and grain' },
@@ -45,28 +45,27 @@ export const en: Content = {
   ],
   projects: [
     {
-      id: 'cxrai',
-      name: 'CXR AI Analyzer: chest X-ray screening',
+      id: 'retail-forecasting',
+      name: 'Retail data platform & demand forecasting',
       tagline:
-        'Clinic screening for cardiomegaly and pleural effusion: ConvNeXt-Tiny, confidence, Grad-CAM, multi-clinic accounts.',
+        'Automated order intake, analytics, demand forecasting, and inventory-risk monitoring in one Dockerized platform.',
       problem:
-        'A clinic needs a second pass on chest films for two common findings, with a score and a heatmap a clinician can agree or disagree with.',
+        'Orders need to arrive once, stay reconciled across the pipeline, and turn into a next-day demand forecast before inventory becomes a problem.',
       result:
-        'Two binary specialists, trained with patient-level holdout and class-weighted loss, shipped in a Spanish multi-clinic app: confidence, Grad-CAM, PDF reports, session auth (master / admin / patient), and an audit trail. Decision support, not a diagnosis.',
-      stack: ['PyTorch', 'timm', 'FastAPI', 'React', 'PostgreSQL', 'Docker'],
-      github: 'https://github.com/roger-git-427/chest_xray_AI',
-      metric: { label: 'holdout', value: 'patient-level' },
+        'An idempotent n8n intake feeds PostgreSQL change-data capture and a scheduled seven-stage Airflow chain. A blocking reconciliation gate protects the run; FastAPI checks inventory and the model produces next-day forecasts and days-of-supply risk tiers.',
+      stack: ['Airflow', 'n8n', 'XGBoost', 'PostgreSQL', 'FastAPI', 'Docker'],
+      metric: { label: '30-day holdout', value: '-14.7% MAE, -20.4% RMSE' },
       stages: {
         ingest:
-          'Sourced from NIH ChestX-ray14, using the official patient-level training and test lists. Fourteen findings exist in the labels; the product ships two, cardiomegaly and pleural effusion, because they are visually distinct and common enough to evaluate. Weights load only when the checkpoint file is on disk. Images are not in the repo.',
+          'Orders enter through an idempotent n8n intake, so a retry does not create the same order twice. PostgreSQL change-data capture carries those changes into the rest of the platform.',
         transform:
-          'No patient appears in both the training and test sets, and each finding is a yes/no label. Both are rare, so the loss is class-weighted instead of rewarding a model that always predicts “no finding.” PNG, JPG, and DICOM all go through the same screening path.',
+          'A scheduled seven-stage Airflow chain prepares the data and stops at a blocking reconciliation gate when the records do not agree. CI tests the DAG contracts before they reach the pipeline.',
         train:
-          'ConvNeXt-Tiny (timm), pretrained on ImageNet, trained as one binary classifier per finding under AdamW. The retained checkpoint is the one with the best validation ROC-AUC; both findings shipped once their classifiers cleared that bar.',
+          'Leakage-safe SKU/day features feed a chronological XGBoost forecast. The split follows time, so future orders never help predict the past.',
         evaluate:
-          'Evaluated on held-out NIH test images, reported separately for each finding. ROC-AUC measures ranking quality; a confusion matrix captures the operating point. The UI shows a confidence score and flags a finding only above a per-condition threshold (0.3 cardiomegaly, 0.4 effusion). Precision at that threshold is the clinic question: when the system says review this, how often is it right?',
+          'On the 30-day holdout, XGBoost reduced MAE by 14.7% and RMSE by 20.4% against persistence. Those are the errors the next-day forecast has to beat before it is useful.',
         serve:
-          'Docker Compose runs Postgres, FastAPI, and nginx; local dev uses SQLite. A user opens a study and sees confidence for cardiomegaly and effusion, a Grad-CAM heatmap, and an exportable report. Clinics are isolated; roles are master, admin, and patient, with sessions and an audit trail. A licensed reader still interprets every image.',
+          'The platform runs in Docker. FastAPI exposes inventory checks; the output is a next-day forecast plus days-of-supply risk tiers so the person reviewing stock can see where to act first.',
       },
     },
     {
@@ -77,21 +76,21 @@ export const en: Content = {
       problem:
         'Complaints arrive as free text. Before a person reads the queue, the system should say which product the narrative is about, and how sure it is, without leaking later complaints into training. Analysts still need SQL on the warehouse, not only a classifier score.',
       result:
-        'On later dates than training (Nov to Dec 2024): 0.80 accuracy, 0.80 weighted F1, 0.68 macro F1 on eight products. Mortgage and credit reporting hold; money transfer does not. FastAPI serves product + confidence, MiniLM similar-complaint search, and SELECT-only SQL on gold.',
+        'On dates later than training: 0.80 accuracy and 0.68 macro F1. FastAPI serves ranked product predictions, MiniLM similar-complaint search, and guarded read-only text-to-SQL on gold.',
       stack: ['Python', 'DuckDB', 'scikit-learn', 'MLflow', 'sentence-transformers', 'FastAPI'],
       github: 'https://github.com/roger-git-427/complaint_intelligence_v2.0',
       metric: { label: 'holdout', value: '0.80 acc, 0.68 macro F1' },
       stages: {
         ingest:
-          'Landed from the CFPB Consumer Complaint Database via API, bulk zip, or a Hugging Face snapshot, then sliced to 2024 narratives (~8k rows). Grain is one complaint. The classifier sees only the narrative; company, issue, state, and date stay in the warehouse for SQL.',
+          'CFPB complaint narratives land in a bronze layer with one complaint as the grain. The classifier sees the narrative; the rest of the complaint fields remain available for analytics.',
         transform:
-          'Bronze is parquet as landed. Silver types dates, maps yes/no flags, and dedupes on complaint_id. Gold is a star schema (fact_complaints; company, product, issue, geo, channel, date). Quality checks uniqueness and company foreign keys. Products with fewer than 40 rows are dropped. After sorting by date_received, the last 20% is holdout: later complaints never train.',
+          'Silver cleans and deduplicates the records; gold is a DuckDB star schema. Automated checks cover uniqueness, nulls, and foreign keys. After sorting by date, later complaints become the holdout and never train.',
         train:
-          'TF-IDF (unigrams and bigrams, 40k features) feeding a class-weighted logistic regression, tracked in MLflow. The retained product run is the one scored on later dates, not a shuffle of the same weeks. Training also fits a timely-response head (weak signal from narrative alone) and builds a MiniLM embedding index over silver, with TF-IDF as fallback.',
+          'Class-weighted TF-IDF feeds a logistic regression tracked in MLflow. A separate MiniLM index supports semantic search over similar complaint narratives.',
         evaluate:
-          'Held-out later dates (2024-11-19 to 2024-12-24): accuracy 0.80, weighted F1 0.80, macro F1 0.68. Mortgage F1 0.89 and credit reporting 0.86; money transfer 0.29. The timely-response model is 0.81 ROC-AUC and 0.50 macro F1; accuracy looks high because almost every response is timely, so it is not the headline number. Each product call returns confidence and ranked alternatives.',
+          'On the chronological holdout, the product classifier reached 0.80 accuracy and 0.68 macro F1. The API returns ranked alternatives as well as the top prediction.',
         serve:
-          'FastAPI: /predict returns product, confidence, and alternatives; /search finds similar complaints with MiniLM; /sql and /chat compile analytic questions to DuckDB on gold. An optional LLM SQL still has to pass a SELECT-only guard (no DML/DDL, no multi-statement). Docker Compose serves the API over the gold parquet and trained artifacts. The model routes the complaint; a person closes the case.',
+          'FastAPI serves ranked predictions, MiniLM semantic search, and text-to-SQL over gold. Generated SQL passes a read-only guard before it reaches DuckDB. The model routes the complaint; a person closes the case.',
       },
     },
   ],
@@ -112,7 +111,7 @@ export const en: Content = {
     demo: 'demo',
     contactTitle: 'Contact',
     contactLede:
-      'Open to AI and data engineering roles. Email or GitHub is the fastest way to reach me.',
+      'Open to AI and data engineering roles. Email or GitHub is the fastest way to reach me; phone: +52 667 185 0986.',
     email: 'Email',
     github: 'GitHub',
     linkedin: 'LinkedIn',
