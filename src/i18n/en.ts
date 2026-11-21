@@ -8,7 +8,7 @@ export const en: Content = {
     oneLiner:
       'I take operational data, build the pipeline around it, train on a leak-safe split, and serve results a person can inspect and use.',
     recentWork: 'Data Manager at Desarrollo Geomatico, Aug 2025 to Sep 2026.',
-    location: 'Tijuana, Baja California, willing to relocate',
+    location: 'Culiacán, Sinaloa, willing to relocate',
     email: 'rogeliolzgaesc@gmail.com',
     github: 'https://github.com/roger-git-427',
     linkedin: 'https://www.linkedin.com/in/rogelio-lizarraga-escobar/',
@@ -16,9 +16,9 @@ export const en: Content = {
   },
   about: {
     summary:
-      'Based in Tijuana; open to remote or relocate. B.S. in Data Science and Mathematics Engineering at Tecnológico de Monterrey, Campus Monterrey (GPA 4.0; minor in Advanced AI), completed in 2025. Most recently Data Manager at a geomatics company: DJI flight data into S3 and a NAS, Azure/PostgreSQL, reporting, and flight-to-station optimization. Native Spanish, English C1, basic French. I look for AI and data engineering roles where a person still has to trust the result.',
+      'Based in Culiacán; open to remote or relocate. B.S. in Data Science and Mathematics Engineering at Tecnológico de Monterrey, Campus Monterrey (GPA 4.0; minor in Advanced AI), completed in 2025. Most recently Data Manager at a geomatics company: DJI flight data into S3 and a NAS, Azure/PostgreSQL, reporting, and flight-to-station optimization. Native Spanish, English C1, basic French. I look for AI and data engineering roles where a person still has to trust the result.',
     background:
-      'From Aug 2025 to Sep 2026, I managed flight data and infrastructure at Desarrollo Geomatico. Before that, I built hotel occupancy forecasting with TCA Software Solutions, shelf-item detection for OXXO FEMSA, and new-product performance forecasting with Arca Continental.',
+      'From Aug 2025 to Oct 2026, I managed flight data and infrastructure at Desarrollo Geomatico. Before that, I built hotel occupancy forecasting with TCA Software Solutions, shelf-item detection for OXXO FEMSA, and new-product performance forecasting with Arca Continental.',
     canDo: [
       'Build idempotent intake, change-data capture, scheduled orchestration, and reconciliation gates around operational data.',
       'Model the grain of a dataset, build bronze → silver → gold, and query it in SQL.',
